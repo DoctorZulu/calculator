@@ -47,6 +47,41 @@ const handleEqual = (state) =>{
     }
 }
 
+const handleCompound = (state) =>{
+    const {currentValue, previousValue, operator} = state;
+    const previous = parseFloat(currentValue);
+    const current = parseFloat(previousValue);
+    const resetState = {previousValue:null}
+    const simState = {currentV: (current * previous), previousV: previous, op: operator}
+    switch (operator) {
+        case "+":
+            return {
+                currentValue: `${previous + current} +`,
+                ...resetState,
+            };
+        case "/":
+            return {
+                currentValue: `${previous / current} +`,
+                ...resetState,
+                console.log(state),
+            };
+        case "*":
+            console.log(simState)
+            return {
+                currentValue: `${previous * current} +`,
+                ...resetState,
+            }
+        case "-":
+            return {
+                currentValue: `${previous - current} +`,
+                ...resetState,
+            }
+        default:
+            return state;
+
+    }
+}
+
 //main calc logic
 const calculator = (type, value, state) => {
     switch (type) {
@@ -55,10 +90,14 @@ const calculator = (type, value, state) => {
         case "clear":
             return initialState;
         case "operator":
-            return {
-                currentValue: "0",
-                operator: value,
-                previousValue: state.currentValue,
+            if (state.operator !== null) {
+                return handleCompound(state);
+            }else {
+                return {
+                    currentValue: "0",
+                    operator: value,
+                    previousValue: state.currentValue,
+                }
             }
         case "posneg":
             return {
